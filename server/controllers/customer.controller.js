@@ -7,7 +7,6 @@ import {
 export const createCustomer = async (req, res) => {
   try {
     const customer = await createCustomerService(req.body);
-
     res.status(201).json(customer);
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {

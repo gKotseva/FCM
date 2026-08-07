@@ -2,7 +2,7 @@ import { db } from "../config/db.js";
 
 export const addTeam = async ({ name, manager_id }) => {
   const [result] = await db.query(
-    "INSERT INTO team (name, manager_id) VALUES (?, ?)",
+    "INSERT INTO teams (name, manager_id) VALUES (?, ?)",
     [name, manager_id],
   );
 
@@ -14,13 +14,13 @@ export const addTeam = async ({ name, manager_id }) => {
 };
 
 export const allTeams = async () => {
-  const [rows] = await db.query("SELECT * FROM team");
+  const [rows] = await db.query("SELECT * FROM teams");
 
   return rows;
 };
 
 export const teamById = async (id) => {
-  const [rows] = await db.query("SELECT * FROM team WHERE id=?", [id]);
+  const [rows] = await db.query("SELECT * FROM teams WHERE id=?", [id]);
 
   return rows[0];
 };
@@ -38,7 +38,7 @@ export const updateTeam = async (id, updates) => {
   values.push(id);
 
   const [result] = await db.query(
-    `UPDATE team SET ${setClause} WHERE id = ?`,
+    `UPDATE teams SET ${setClause} WHERE id = ?`,
     values,
   );
 
@@ -46,7 +46,7 @@ export const updateTeam = async (id, updates) => {
 };
 
 export const removeTeam = async (id) => {
-  const [result] = await db.query("DELETE FROM team WHERE id = ?", [id]);
+  const [result] = await db.query("DELETE FROM teams WHERE id = ?", [id]);
 
   return result;
 };

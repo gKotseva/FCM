@@ -10,7 +10,7 @@ export const createSession = async ({
 }) => {
   await db.query(
     `
-    INSERT INTO session
+    INSERT INTO sessions
     (
       user_id,
       refresh_token_hash,
@@ -28,7 +28,7 @@ export const findSessionByUserIdAndToken = async (userId, refreshToken) => {
   const [rows] = await db.query(
     `
     SELECT *
-    FROM session
+    FROM sessions
     WHERE user_id = ?
     AND revoked_at IS NULL
     ORDER BY id DESC
@@ -53,7 +53,7 @@ export const findSessionByUserIdAndToken = async (userId, refreshToken) => {
 export const revokeSession = async (sessionId) => {
   await db.query(
     `
-    UPDATE session
+    UPDATE sessions
     SET revoked_at = NOW()
     WHERE id = ?
     `,
