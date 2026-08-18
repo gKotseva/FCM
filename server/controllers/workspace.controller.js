@@ -4,6 +4,10 @@ import {
   getSingleWorkspaceService,
   getWorkspacesService,
   updateSingleWorkspaceService,
+  addWorkspaceMemberService,
+  getWorkspaceMembersService,
+  removeWorkspaceMemberService,
+  updateWorkspaceMemberService,
 } from "../services/workspace.service.js";
 
 export const getWorkspaces = async (req, res) => {
@@ -76,6 +80,76 @@ export const deleteSingleWorkspace = async (req, res) => {
 
   try {
     await deleteSingleWorkspaceService(workspaceId);
+
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getWorkspaceMembers = async (req, res) => {
+  const { workspaceId } = req.params;
+
+  try {
+    const response = await getWorkspaceMembersService(workspaceId);
+
+    return res.status(200).json({
+      response,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const addWorkspaceMember = async (req, res) => {
+  const { workspaceId } = req.params;
+  const { userId, permission, role } = req.body;
+
+  try {
+    const response = await addWorkspaceMemberService(
+      workspaceId,
+      userId,
+      permission,
+      role,
+    );
+
+    return res.status(201).json({
+      message: "Member added successfully.",
+      memberId: response.insertId,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const updateWorkspaceMember = async (req, res) => {
+  const { workspaceId, userId } = req.params;
+  const { permission, role } = req.body;
+
+  try {
+    await updateWorkspaceMemberService(workspaceId, userId, permission, role);
+
+    return res.status(200).json({
+      message: "Member updated successfully.",
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const removeWorkspaceMember = async (req, res) => {
+  const { workspaceId, userId } = req.params;
+
+  try {
+    await removeWorkspaceMemberService(workspaceId, userId);
 
     return res.status(204).send();
   } catch (error) {
